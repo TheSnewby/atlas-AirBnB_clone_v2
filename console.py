@@ -283,7 +283,8 @@ class HBNBCommand(cmd.Cmd):
             if args and args[0] == '\"':  # Check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
-                att_val = args[second_quote + 2:]  # Strip quote and leading space
+                # Strip the quote and leading space
+                att_val = args[second_quote + 2:]
             else:  # Key/value pairs as args
                 args = args.split(" ")
                 if len(args) < 2:  # Insufficient args
