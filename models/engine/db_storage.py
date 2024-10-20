@@ -15,7 +15,9 @@ class DBStorage:
 
     def __init__(self):
         """Initialize a new DBStorage instance."""
-        self.__engine = create_engine('mysql+mysqldb://user:pwd@localhost/db_name')
+        self.__engine = create_engine(
+            'mysql+mysqldb://user:pwd@localhost/db_name'
+        )
 
     def all(self, cls=None):
         """Query all objects based on class or all classes."""
