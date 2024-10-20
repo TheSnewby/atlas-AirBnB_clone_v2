@@ -82,5 +82,6 @@ class TestHBNBCommand(unittest.TestCase):
         self.console.do_update(f"BaseModel {bm.id} name 'New Name'")
         self.assertEqual(bm.name, 'New Name')
 
+
 if __name__ == '__main__':
     unittest.main()
