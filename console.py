@@ -309,5 +309,6 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: update <className> <objectId> " +
               "<attributeName> <attributeValue>\n")
 
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
