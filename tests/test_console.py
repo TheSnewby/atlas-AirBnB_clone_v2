@@ -1,6 +1,6 @@
 import unittest
 from io import StringIO
-from unittest.mock import patch  # Import patch here
+from unittest.mock import patch
 import sys
 from console import HBNBCommand
 from models import storage
@@ -14,6 +14,10 @@ class TestHBNBCommand(unittest.TestCase):
         self.console = HBNBCommand()
         self.console.prompt = '(hbnb) '
 
+    def tearDown(self):
+        """Clean up after tests."""
+        storage.all().clear()  # Assuming storage.all() returns a dictionary of instances
+
     def test_prompt(self):
         """Test prompt initialization."""
         self.assertEqual(self.console.prompt, '(hbnb) ')
@@ -25,7 +29,7 @@ class TestHBNBCommand(unittest.TestCase):
     def test_do_EOF(self):
         """Test the EOF command."""
         with self.assertRaises(SystemExit):
-            self.console.do_EOF("")
+            self.console.do_EOF("")  # This should raise SystemExit
 
     def test_do_create(self):
         """Test the create command."""
@@ -81,10 +85,10 @@ class TestHBNBCommand(unittest.TestCase):
         bm = BaseModel()
         bm.save()
         self.console.do_update(f"BaseModel {bm.id} name 'New Name'")
-
-        # Ensure BaseModel allows dynamic attribute assignment
+        
+        # Check if the attribute was updated correctly
         self.assertTrue(hasattr(bm, 'name'))  # Check if name attribute exists
-        self.assertEqual(bm.name, 'New Name')
+        self.assertEqual(bm.name, 'New Name')  # Verify the value is updated
 
 
 if __name__ == '__main__':

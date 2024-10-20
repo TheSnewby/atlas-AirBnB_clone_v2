@@ -80,7 +80,6 @@ class HBNBCommand(cmd.Cmd):
                     # Check for *args or **kwargs
                     if (pline[0] == '{' and pline[-1] == '}' and
                             isinstance(eval(pline), dict)):
-
                         _args = pline
                     else:
                         _args = pline.replace(',', '').strip()
@@ -283,32 +282,30 @@ class HBNBCommand(cmd.Cmd):
             if args and args[0] == '\"':  # Check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
-                # Strip the quote and leading space
-                att_val = args[second_quote + 2:]
-            else:  # Key/value pairs as args
-                args = args.split(" ")
-                if len(args) < 2:  # Insufficient args
-                    print("** value missing **")
-                    return
-                att_name, att_val = args[0], args[1]
+                # Strip the quote and whitespace, find corresponding value
+                att_val = args[second_quote + 1:].strip().partition(" ")[0]
 
-        # Call method to apply update on the object
-        try:
-            instance = storage.all()[key]
-            if hasattr(instance, att_name):
-                setattr(instance, att_name, att_val)
-                instance.save()  # Save the instance
-            else:
-                print("** attribute doesn't exist **")
-        except Exception as e:
-            print(e)
+            else:  # There are no arguments
+                print("** attribute name missing **")
+                return
+
+        # Check for value of attribute
+        if not att_val:
+            print("** value missing **")
+            return
+
+        # Handle assignment
+        obj = storage.all()[key]
+        if hasattr(obj, att_name):
+            setattr(obj, att_name, att_val)
+            obj.save()
+        else:
+            print("** attribute doesn't exist **")
 
     def help_update(self):
         """ Help information for the update command """
-        print("Updates an object with new information.")
-        print("[Usage]: update <className> <objectId> " +
-              "<attributeName> <attributeValue>\n")
-
+        print("Updates an instance of a class")
+        print("[Usage]: update <class_name> <object_id> <attribute_name> <attribute_value> or update <class_name> <object_id> <{key: value}>")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
