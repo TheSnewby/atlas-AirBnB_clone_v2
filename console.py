@@ -303,12 +303,12 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute doesn't exist **")
 
     def help_update(self):
-    """ Help information for the update command """
-    print("Updates an instance of a class")
-    print(
-        "[Usage]: update <class_name> <object_id> <attribute_name> <attribute_value> "
-        "or update <class_name> <object_id> <{key: value}>"
-    )
+        """ Help information for the update command """
+        print("Updates an instance of a class")
+        print(
+            "[Usage]: update <class_name> <object_id> <attribute_name> <attribute_value> "
+            "or update <class_name> <object_id> <{key: value}>"
+            )
 
 
 if __name__ == '__main__':
