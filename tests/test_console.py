@@ -81,7 +81,7 @@ class TestHBNBCommand(unittest.TestCase):
         bm = BaseModel()
         bm.save()
         self.console.do_update(f"BaseModel {bm.id} name 'New Name'")
-        
+
         # Ensure BaseModel allows dynamic attribute assignment
         self.assertTrue(hasattr(bm, 'name'))  # Check if name attribute exists
         self.assertEqual(bm.name, 'New Name')
