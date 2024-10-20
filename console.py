@@ -306,7 +306,8 @@ class HBNBCommand(cmd.Cmd):
     def help_update(self):
         """ Help information for the update command """
         print("Updates an object with new information.")
-        print("[Usage]: update <className> <objectId> <attributeName> <attributeValue>\n")
+        print("[Usage]: update <className> <objectId> " +
+              "<attributeName> <attributeValue>\n")
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
