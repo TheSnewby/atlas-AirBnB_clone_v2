@@ -1,5 +1,6 @@
 import unittest
 from io import StringIO
+from unittest.mock import patch  # Import patch here
 import sys
 from console import HBNBCommand
 from models import storage
@@ -80,6 +81,9 @@ class TestHBNBCommand(unittest.TestCase):
         bm = BaseModel()
         bm.save()
         self.console.do_update(f"BaseModel {bm.id} name 'New Name'")
+        
+        # Ensure BaseModel allows dynamic attribute assignment
+        self.assertTrue(hasattr(bm, 'name'))  # Check if name attribute exists
         self.assertEqual(bm.name, 'New Name')
 
 
