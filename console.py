@@ -307,8 +307,8 @@ class HBNBCommand(cmd.Cmd):
         print("Updates an instance of a class")
         print(
             "[Usage]: update <class_name> <object_id> <attribute_name> <attribute_value>
-            "or update <class_name> <object_id> <{key: value}>"
-)
+            "or update <class_name> <object_id> <{key: value}>")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
