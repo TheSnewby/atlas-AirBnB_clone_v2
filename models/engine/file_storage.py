@@ -10,12 +10,14 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage"""
-        # if cls in HBNBCommand.classes:
-        #     return 
-        # else:
-        #     return FileStorage.__objects
-        return FileStorage.__objects
+        """Returns a dictionary of models (of a class) currently in storage"""
+        if cls in HBNBCommand.classes:
+            cls_dict = {key: value for key, value in
+                        FileStorage.__objects.items()
+                        if isinstance(value, cls)} 
+            return cls_dict
+        else:
+            return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
