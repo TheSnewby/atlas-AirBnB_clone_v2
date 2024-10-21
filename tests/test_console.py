@@ -85,7 +85,8 @@ class TestHBNBCommand(unittest.TestCase):
         bm = BaseModel()
         bm.save()
         self.console.do_update(f"BaseModel {bm.id} name 'New Name'")
-        
+        # above line has an f-string. will it work?
+
         # Check if the attribute was updated correctly
         self.assertTrue(hasattr(bm, 'name'))  # Check if name attribute exists
         self.assertEqual(bm.name, 'New Name')  # Verify the value is updated
