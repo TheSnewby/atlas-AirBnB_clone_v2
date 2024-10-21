@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
-from console import HBNBCommand
 
 
 class FileStorage:
@@ -11,6 +10,7 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models (of a class) currently in storage"""
+        from console import HBNBCommand
         if cls in HBNBCommand.classes:
             cls_dict = {key: value for key, value in
                         FileStorage.__objects.items()
