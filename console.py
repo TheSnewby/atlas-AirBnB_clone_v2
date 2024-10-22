@@ -108,7 +108,8 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
         print()
-        return True  # End the command loop
+        # return True
+        raise SystemExit  # End the command loop
 
     def help_EOF(self):
         """ Prints the help documentation for EOF """

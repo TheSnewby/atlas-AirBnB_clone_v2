@@ -10,14 +10,28 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models (of a class) currently in storage"""
-        from console import HBNBCommand
-        if cls in HBNBCommand.classes:
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+
+        classes = {
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                  }
+        if cls in classes:
             cls_dict = {key: value for key, value in
                         FileStorage.__objects.items()
-                        if isinstance(value, cls)} 
+                        if isinstance(value, cls)}
             return cls_dict
         else:
             return FileStorage.__objects
+        # return FileStorage.__objects
+        # all() is not returning all new State/City created
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -61,3 +75,10 @@ class FileStorage:
         if obj and obj in FileStorage.__objects:
             del self.all()[obj.id]
             self.save()
+            # key = f"{c_name}.{c_id}"
+
+            # try:
+            #     del storage.all()[key]
+            #     storage.save()
+            # except KeyError:
+            #     print("** no instance found **")
