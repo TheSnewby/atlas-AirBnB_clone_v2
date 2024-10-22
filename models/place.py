@@ -1,10 +1,13 @@
+#!/usr/bin/python3
+"""This module defines a class Place"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 class Place(BaseModel, Base):
+    """This class defines a place by various attributes"""
     __tablename__ = 'places'
-
+    
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     name = Column(String(128), nullable=False)
@@ -17,5 +20,5 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
 
     # Relationships
-    city = relationship("City", back_populates="places")
-    user = relationship("User", back_populates="places")
+    user = relationship("User", back_populates="places", cascade="all, delete-orphan")
+    city = relationship("City", back_populates="places", cascade="all, delete-orphan")
