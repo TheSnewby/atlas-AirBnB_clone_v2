@@ -3,9 +3,23 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
+from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
+from models.user import User
+import MySQLdb
+import os
 # Add other model imports as needed
 
+
+mysql_user = os.getenv('HBNB_MYSQL_USER')
+mysql_password = os.getenv('HBNB_MYSQL_PWD')
+mysql_host = os.getenv('HBNB_MYSQL_HOST', 'localhost')
+mysql_db = os.getenv('HBNB_MYSQL_DB')
 
 class DBStorage:
     """Represents the database storage engine."""
@@ -13,15 +27,44 @@ class DBStorage:
     __engine = None
     __session = None
 
+    classes = {
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+            }
+
     def __init__(self):
         """Initialize a new DBStorage instance."""
         self.__engine = create_engine(
-            'mysql+mysqldb://user:pwd@localhost/db_name'
+            'mysql+mysqldb://{}:{}@{}/{}'.format(
+                mysql_user, mysql_password,
+                mysql_host, mysql_db
+            ),
+            pool_pre_ping=True
         )
+        if os.getenv('HBNB_ENV') == 'test':
+            Base.metadata.drop_all(self.__engine)
+        self.__session = sessionmaker(bind=self.__engine)()
+        # self.__engine = create_engine(
+        #     'mysql+mysqldb://user:pwd@localhost/db_name'
+        # )
 
     def all(self, cls=None):
         """Query all objects based on class or all classes."""
-        # Implementation for querying the database
+        result_dict = {}
+        if cls and cls in DBStorage.classes.values():
+            query = self.__session.query(cls).all()
+            for item in query:
+                result_dict['{}.{}'.format(cls.__name__, item.id)] = item
+        else:
+            query = []
+            for model_class in DBStorage.classes.values():
+                query.extend(self.__session.query(model_class).all())
+            for item in query:
+                result_dict['{}.{}'.format(
+                    item.__class__.__name__, item.id)] = item
+        return result_dict
+
 
     def new(self, obj):
         """Add a new object to the current database session."""
