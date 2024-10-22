@@ -4,8 +4,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.user import User
+import MySQLdb
+import os
 # Add other model imports as needed
 
+
+mysql_user = os.getenv('HBNB_MYSQL_USER')
+mysql_password = os.getenv('HBNB_MYSQL_PWD')
+mysql_host = os.getenv('HBNB_MYSQL_HOST', 'localhost')
+mysql_db = os.getenv('HBNB_MYSQL_DB')
 
 class DBStorage:
     """Represents the database storage engine."""
@@ -16,8 +23,17 @@ class DBStorage:
     def __init__(self):
         """Initialize a new DBStorage instance."""
         self.__engine = create_engine(
-            'mysql+mysqldb://user:pwd@localhost/db_name'
+            'mysql+mysqldb://{}:{}@{}/{}'.format(
+                mysql_user, mysql_password,
+                mysql_host, mysql_db
+            ),
+            pool_pre_ping=True
         )
+        if os.getenv('HBNB_ENV') == 'test':
+            Base.metadata.drop_all(self.__engine)
+        # self.__engine = create_engine(
+        #     'mysql+mysqldb://user:pwd@localhost/db_name'
+        # )
 
     def all(self, cls=None):
         """Query all objects based on class or all classes."""
