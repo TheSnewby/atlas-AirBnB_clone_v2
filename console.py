@@ -122,36 +122,34 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
-            print("** class name missing **")
-            return
-        args = args.strip().split()
-        if args[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        params = {}
-        for arg in args[1:]:
-            if '=' in arg:
-                key, value = arg.split('=', 1)
-                if value.startswith('"') and value.endswith('"'):
-                    value = value.replace('_',' ').replace('"', '')
-                    # consider instead: 
-                    # value = value.replace('_',' ').replace('"', '\\"')
-                    # value = value[1:-1].replace('_',' ').replace('\\"', '"')
+        print("** class name missing **")
+        return
+    args = args.strip().split()
+    if args[0] not in HBNBCommand.classes:
+        print("** class doesn't exist **")
+        return
+    params = {}
+    for arg in args[1:]:
+        if '=' in arg:
+            key, value = arg.split('=', 1)
+            if value.startswith('"') and value.endswith('"'):
+                value = value.replace('_', ' ').replace('"', '')
+                params[key] = value
+            elif value.isdigit():
+                value = int(value)
+                params[key] = value
+            elif '.' in value:
+                try:
+                    value = float(value)
                     params[key] = value
-                elif value.isdigit():
-                    value = int(value)
-                    params[key] = value
-                elif '.' in value:
-                    try:
-                        value = float(value)
-                        params[key] = value
-                    except:
-                        pass
-        print("params: ", end='')
-        print(params)
-        new_instance = HBNBCommand.classes[args[0]](params)
-        new_instance.save()  # Save immediately after creation
-        print(new_instance.id)
+                except Exception:
+                    pass
+    print("params: ", end=' ')
+    print(params)
+    new_instance = HBNBCommand.classes[args[0]](params)
+    new_instance.save()  # Save immediately after creation
+    print(new_instance.id)
+
 
     def help_create(self):
         """ Help information for the create method """
