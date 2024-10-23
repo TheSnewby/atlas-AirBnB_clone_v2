@@ -124,23 +124,19 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-    args = args.strip().split()
-    if args[0] not in HBNBCommand.classes:
-        print("** class doesn't exist **")
-        return
-    params = {}
-    for arg in args[1:]:
-        if '=' in arg:
-            key, value = arg.split('=', 1)
-            if value.startswith('"') and value.endswith('"'):
-                value = value.replace('_', ' ').replace('"', '')
-                params[key] = value
-            elif value.isdigit():
-                value = int(value)
-                params[key] = value
-            elif '.' in value:
-                try:
-                    value = float(value)
+        args = args.strip().split()
+        if args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        params = {}
+        for arg in args[1:]:
+            if '=' in arg:
+                key, value = arg.split('=', 1)
+                if value.startswith('"') and value.endswith('"'):
+                    value = value.replace('_', ' ').replace('"', '')
+                    params[key] = value
+                elif value.isdigit():
+                    value = int(value)
                     params[key] = value
                 else:
                     try:
@@ -148,9 +144,9 @@ class HBNBCommand(cmd.Cmd):
                         params[key] = value
                     except:
                         pass
-        print("params: ", end='')  # DEBUG
-        print(params)  # DEBUG
-        print(args[0])  # DEBUG
+        # print("params: ", end='')  # DEBUG
+        # print(params)  # DEBUG
+        # print(args[0])  # DEBUG
         new_instance = HBNBCommand.classes[args[0]](**params)
         new_instance.save()  # Save immediately after creation
         print(new_instance.id)
