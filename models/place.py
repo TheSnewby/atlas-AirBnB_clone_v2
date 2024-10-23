@@ -20,5 +20,5 @@ class Place(BaseModel, Base):
     longitude = Column(Float, nullable=True)
 
     # Relationships
-    user = relationship("User", back_populates="places", cascade="all, delete-orphan")
-    city = relationship("City", back_populates="places", cascade="all, delete-orphan")
+    # user = relationship("User", back_populates="places", cascade="all, delete-orphan")
+    # city = relationship("City", back_populates="places", cascade="all, delete-orphan")

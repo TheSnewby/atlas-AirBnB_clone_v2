@@ -1,7 +1,7 @@
 import os
 
-
-if os.getenv('HBNB_MYSQL_STORAGE') == 'db':
+storage_type = os.getenv('HBNB_MYSQL_STORAGE')
+if  storage_type == 'db':
     from .db_storage import DBStorage
     storage = DBStorage()
 else:

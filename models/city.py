@@ -9,4 +9,4 @@ class City(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     # Relationship
-    places = relationship("Place", back_populates="city", cascade="all, delete-orphan")
+    # places = relationship("Place", back_populates="city", cascade="all, delete-orphan")

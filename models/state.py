@@ -3,13 +3,15 @@
 from models.base_model import BaseModel, Base
 from datetime import datetime
 from sqlalchemy import Column, ForeignKey, String
+from . import engine
 
 
 class State(BaseModel):
     """ State class """
-    __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
-    
+    # if  engine.storage_type == 'db':
+    #     __tablename__ = 'states'
+    #     name = Column(String(128), nullable=False)
 
-
-    # name = ""
+    # else:
+    #     name = ''
+    name = ''
