@@ -146,7 +146,7 @@ class HBNBCommand(cmd.Cmd):
                         params[key] = value
                     except:
                         pass
-        new_instance = HBNBCommand.classes[args](params)
+        new_instance = HBNBCommand.classes[args[0]](params)
         new_instance.save()  # Save immediately after creation
         print(new_instance.id)
 
