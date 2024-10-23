@@ -138,7 +138,7 @@ class HBNBCommand(cmd.Cmd):
                 elif value.isdigit():
                     value = int(value)
                     params[key] = value
-                elif '.' in value:
+                else:
                     try:
                         value = float(value)
                         params[key] = value
