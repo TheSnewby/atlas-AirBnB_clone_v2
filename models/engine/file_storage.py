@@ -24,7 +24,8 @@ class FileStorage:
             'Review': Review
         }
 
-        if cls in classes:
+        # If cls is provided, filter by class
+        if cls and cls in classes.values():
             cls_dict = {key: value for key, value in
                          FileStorage.__objects.items()
                          if isinstance(value, cls)}
@@ -34,7 +35,7 @@ class FileStorage:
 
     def new(self, obj):
         """Adds a new object to storage dictionary."""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+        FileStorage.__objects[obj.to_dict()['__class__'] + '.' + obj.id] = obj
 
     def save(self):
         """Saves storage dictionary to file."""
@@ -67,7 +68,7 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                    FileStorage.__objects[key] = classes[val['__class__']](**val)
         except (FileNotFoundError, json.JSONDecodeError):
             # Handle the case where the file might be empty or unreadable
             pass
