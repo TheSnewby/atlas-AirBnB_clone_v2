@@ -30,13 +30,13 @@ class BaseModel:
             # if not in
             # else: create it for the above 3
             if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
+                kwargs['updated_at'] = datetime.fromisoformat(
+                    kwargs['updated_at'])
             else:
                 self.updated_at = datetime.now(timezone.utc)
             if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                     '%Y-%m-%dT%H:%M:%S.%f')
+                kwargs['created_at'] = datetime.fromisoformat(
+                    kwargs['created_at'])
             else:
                 self.created_at = datetime.now(timezone.utc)
             if 'id' not in kwargs:
