@@ -14,3 +14,4 @@ class City(BaseModel, Base):
     # Relationship to Place
     places = relationship("Place", back_populates="city",
                           cascade="all, delete-orphan")
+

@@ -1,11 +1,23 @@
 #!/usr/bin/python3
 """State Module for HBNB project"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
+from datetime import datetime
+from sqlalchemy import Column, ForeignKey, String
 
 
-class State(BaseModel, Base):
-    """State class"""
-    __tablename__ = 'states'
+class State(BaseModel):
+    """ State class """
+    # if  engine.storage_type == 'db':
+    #     __tablename__ = 'states'
+    #     name = Column(String(128), nullable=False)
 
-    name = Column(String(128), nullable=False)
+    # else:
+    #     name = ''
+    name = ''
+
+# class State(BaseModel, Base):
+#     """State class"""
+#     __tablename__ = 'states'
+
+#     name = Column(String(128), nullable=False)
+

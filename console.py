@@ -142,13 +142,18 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     value = float(value)
                     params[key] = value
-                except Exception:
-                    pass
-    print("params: ", end=' ')
-    print(params)
-    new_instance = HBNBCommand.classes[args[0]](params)
-    new_instance.save()  # Save immediately after creation
-    print(new_instance.id)
+                elif '.' in value:
+                    try:
+                        value = float(value)
+                        params[key] = value
+                    except:
+                        pass
+        print("params: ", end='')  # DEBUG
+        print(params)  # DEBUG
+        print(args[0])  # DEBUG
+        new_instance = HBNBCommand.classes[args[0]](**params)
+        new_instance.save()  # Save immediately after creation
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
