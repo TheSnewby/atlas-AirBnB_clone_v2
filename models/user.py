@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """This module defines a class User"""
-from models.base_model import BaseModel, Base
+from models.base_model import BaseModel, Base  # Ensure this line is correct
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
@@ -16,4 +16,3 @@ class User(BaseModel, Base):
     
     # Relationship with Place (if applicable)
     places = relationship("Place", back_populates="user", cascade="all, delete-orphan")
-
