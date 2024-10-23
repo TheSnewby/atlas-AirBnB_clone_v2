@@ -11,7 +11,7 @@ class Place(BaseModel, Base):
 
     # Class attributes representing columns
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)  # Foreign key for City
+    city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     name = Column(String(128), nullable=False)
 
     # Relationships
