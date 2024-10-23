@@ -10,7 +10,6 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-import shlex
 
 
 class HBNBCommand(cmd.Cmd):
@@ -125,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        args = shlex.split(args.strip())  # maintains quotes
+        args = args.strip().split()
         if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
@@ -134,8 +133,10 @@ class HBNBCommand(cmd.Cmd):
             if '=' in arg:
                 key, value = arg.split('=', 1)
                 if value.startswith('"') and value.endswith('"'):
-                    value = value.replace('_',' ').replace('"', '\\"')
-                    # consider instead: value[1:-1] ... .replace('"', '')
+                    value = value.replace('_',' ').replace('"', '')
+                    # consider instead: 
+                    # value = value.replace('_',' ').replace('"', '\\"')
+                    # value = value[1:-1].replace('_',' ').replace('\\"', '"')
                     params[key] = value
                 elif value.isdigit():
                     value = int(value)
@@ -146,6 +147,8 @@ class HBNBCommand(cmd.Cmd):
                         params[key] = value
                     except:
                         pass
+        print("params: ", end='')
+        print(params)
         new_instance = HBNBCommand.classes[args[0]](params)
         new_instance.save()  # Save immediately after creation
         print(new_instance.id)
@@ -177,7 +180,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        key = f"{c_name}.{c_id}"
+        key = "{}.{}".format(c_name, c_id)
         try:
             print(storage.all()[key])
         except KeyError:
