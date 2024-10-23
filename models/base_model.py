@@ -64,7 +64,7 @@ class BaseModel:
         """Deletes a BaseModel instance from models.storage."""
         from models import storage
         storage.delete(self)
-        
+
 # ORIGINAL CODE:
 # class BaseModel:
 #     """A base class for all hbnb models"""

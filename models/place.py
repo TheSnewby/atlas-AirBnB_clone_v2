@@ -16,4 +16,8 @@ class Place(BaseModel, Base):
 
     # Relationships
     user = relationship("User", back_populates="places")
-    city = relationship("City", back_populates="places", cascade="all, delete-orphan")
+    city = relationship(
+        "City",
+        back_populates="places",
+        cascade="all, delete-orphan"
+    )
