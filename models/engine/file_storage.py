@@ -82,11 +82,3 @@ class FileStorage:
                 self.save()
             else:
                 print("** no instance found **")
-
-            # key = f"{c_name}.{c_id}"
-
-            # try:
-            #     del storage.all()[key]
-            #     storage.save()
-            # except KeyError:
-            #     print("** no instance found **")
