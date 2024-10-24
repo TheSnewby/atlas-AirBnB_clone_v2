@@ -1,10 +1,12 @@
 #!/usr/bin/python3
-"""This module initializes the package and instantiates the FileStorage object."""
+"""This module initializes the package and instantiates
+the FileStorage and DBStorage objects."""
 from models.engine import storage_type
 # from models.base_model import BaseModel, Base
 # from models.user import User
 # from models.place import Place
 # from models.city import City  # Import the City class
+
 
 if storage_type == 'db':
     from models.engine.db_storage import DBStorage

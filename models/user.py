@@ -7,7 +7,6 @@ from sqlalchemy.orm import relationship
 from models.engine import storage_type
 
 
-
 class User(BaseModel, Base):
     """This class defines a user by various attributes"""
     if storage_type == 'db':
