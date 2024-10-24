@@ -1,23 +1,29 @@
 #!/usr/bin/python3
 """State Module for HBNB project"""
 from models.base_model import BaseModel, Base
-from datetime import datetime
-from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy import Column, String
+from models.engine import storage_type
+from sqlalchemy.orm import relationship
 
 
-class State(BaseModel):
+class State(BaseModel, Base):
     """ State class """
-    # if  engine.storage_type == 'db':
-    #     __tablename__ = 'states'
-    #     name = Column(String(128), nullable=False)
+    if  storage_type == 'db':
+        __tablename__ = 'states'
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', backref='state',
+                              cascade="all, delete-orphan")
 
-    # else:
-    #     name = ''
-    name = ''
+    else:
+        name = ''
 
-# class State(BaseModel, Base):
-#     """State class"""
-#     __tablename__ = 'states'
-
-#     name = Column(String(128), nullable=False)
-
+        # getter
+        def get_cities(self):
+            from models.__init__ import storage
+            from models.city import City
+            list_cities = []
+            cities_dict = storage.all(City)
+            for city in cities_dict.values():
+                if city.state_id == self.id:
+                    list_cities.append(city)
+            return list_cities
