@@ -9,9 +9,8 @@ from models.engine import storage_type
 
 class User(BaseModel, Base):
     """This class defines a user by various attributes"""
+    __tablename__ = 'users'
     if storage_type == 'db':
-        __tablename__ = 'users'
-
         # Class attributes representing columns
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)

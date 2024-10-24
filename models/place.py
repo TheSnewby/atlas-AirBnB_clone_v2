@@ -8,9 +8,8 @@ from models.engine import storage_type
 
 class Place(BaseModel, Base):
     """This class defines a place by various attributes"""
+    __tablename__ = 'places'
     if storage_type == 'db':
-        __tablename__ = 'places'
-
         # Class attributes representing columns
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)

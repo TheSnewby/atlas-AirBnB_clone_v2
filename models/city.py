@@ -7,10 +7,8 @@ from models.engine import storage_type
 
 class City(BaseModel, Base):
     """This class defines a city by its attributes"""
+    __tablename__ = 'cities'
     if storage_type == 'db':
-
-        __tablename__ = 'cities'
-
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
         name = Column(String(128), nullable=False)
 
