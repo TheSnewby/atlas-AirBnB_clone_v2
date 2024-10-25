@@ -1,12 +1,28 @@
--- a script that prepares a MySQL server for the project:
+-- Script to set up MySQL server for the HBNB project
 
--- A database hbnb_dev_db
--- A new user hbnb_dev (in localhost)
--- The password of hbnb_dev should be set to hbnb_dev_pwd
--- hbnb_dev should have all privileges on the database hbnb_dev_db (and only this database)
--- hbnb_dev should have SELECT privilege on the database performance_schema (and only this database)
--- If the database hbnb_dev_db or the user hbnb_dev already exists, your script should not fail
+-- Create the database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
+
+-- Create the user if it doesn't exist
 CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED BY 'hbnb_dev_pwd';
-GRANT ALL PRIVILEGES on hbnb_dev_db.* TO 'hbnb_dev'@'localhost';
+
+-- Grant the user all privileges on the hbnb_dev_db database
+GRANT ALL PRIVILEGES ON hbnb_dev_db.* TO 'hbnb_dev'@'localhost';
+
+-- Grant SELECT privilege on the performance_schema database
 GRANT SELECT ON performance_schema.* TO 'hbnb_dev'@'localhost';
+
+-- Switch to the database
+USE hbnb_dev_db;
+
+-- Create the states table if it doesn't exist
+CREATE TABLE IF NOT EXISTS states (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Optionally insert sample data into the states table
+INSERT INTO states (name) VALUES ('California'), ('Texas'), ('Florida');
+
+-- Flush privileges to ensure all changes take effect
+FLUSH PRIVILEGES;
