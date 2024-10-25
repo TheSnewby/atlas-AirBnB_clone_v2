@@ -211,10 +211,11 @@ class HBNBCommand(cmd.Cmd):
 
         key = f"{c_name}.{c_id}"
         obj = storage.all().get(key)
-        if obj:
-            storage.delete(obj)
-        else:
-            raise KeyError("** no instance found **")
+        try:
+            if obj:
+                storage.delete(obj)
+        except KeyError:
+            print("** no instance found **")
 
     def help_destroy(self):
         """ Help information for the destroy command """
