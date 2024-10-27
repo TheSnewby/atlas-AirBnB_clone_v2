@@ -28,7 +28,10 @@ class BaseModel:
             #     raise KeyError('id is required')
 
             # Assign values from kwargs or set default values
-            self.id = kwargs['id']
+            if 'id' in kwargs:
+                self.id = kwargs['id']
+            else:
+                self.id = str(uuid.uuid4())
 
             if 'created_at' in kwargs:
                 kwargs['created_at'] = datetime.fromisoformat(kwargs['created_at'])
