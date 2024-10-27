@@ -24,8 +24,8 @@ class BaseModel:
             self.updated_at = datetime.now(timezone.utc)
 
         else:
-            if 'id' not in kwargs:
-                raise KeyError('id is required')
+            # if 'id' not in kwargs:
+            #     raise KeyError('id is required')
 
             # Assign values from kwargs or set default values
             self.id = kwargs['id']
@@ -50,6 +50,7 @@ class BaseModel:
 
             # Update instance dictionary with kwargs
             self.__dict__.update(kwargs)
+            self.save()
 
     def to_dict(self):
         """Convert instance into dict format."""
