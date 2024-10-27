@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
 
-
 Base = declarative_base()
 
 
@@ -14,39 +13,31 @@ class BaseModel:
     """A base class for all hbnb models."""
 
     id = Column(String(128), nullable=False, primary_key=True)
-    created_at = Column(DateTime, nullable=False,
-                        default=datetime.now(timezone.utc))
-    updated_at = Column(DateTime, nullable=False,
-                        default=datetime.now(timezone.utc))
+    created_at = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
+    updated_at = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
 
     def __init__(self, *args, **kwargs):
         """Instantiates a new model."""
         if not kwargs:
-            # print("DEBUG: NOT KWARGS")  # DEBUG
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now(timezone.utc)
             self.updated_at = datetime.now(timezone.utc)
         else:
             if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.fromisoformat(
-                    kwargs['updated_at'])
+                kwargs['updated_at'] = datetime.fromisoformat(kwargs['updated_at'])
             else:
                 self.updated_at = datetime.now(timezone.utc)
             if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.fromisoformat(
-                    kwargs['created_at'])
+                kwargs['created_at'] = datetime.fromisoformat(kwargs['created_at'])
             else:
                 self.created_at = datetime.now(timezone.utc)
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
             if '__class__' in kwargs:
                 del kwargs['__class__']
-            # print('DEBUG: BaseModel Else')  # DEBUG
             for key, val in kwargs.items():
-                # print('DEBUG: BaseModel: {}'.format(key))  # DEBUG
-                if key not in ['updated_at','created_at']:
+                if key not in ['updated_at', 'created_at']:
                     setattr(self, key, val)
-                    # print('DEBUG: setattr')  # DEBUG
             self.__dict__.update(kwargs)
 
     def __str__(self):
