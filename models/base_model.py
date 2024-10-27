@@ -24,11 +24,14 @@ class BaseModel:
             self.updated_at = datetime.now(timezone.utc)
 
         else:
-            if 'id' not in kwargs:
-                raise KeyError('id is required')
+            # if 'id' not in kwargs:
+            #     raise KeyError('id is required')
 
             # Assign values from kwargs or set default values
-            self.id = kwargs['id']
+            if 'id' in kwargs:
+                self.id = kwargs['id']
+            else:
+                self.id = str(uuid.uuid4())
 
             if 'created_at' in kwargs:
                 kwargs['created_at'] = datetime.fromisoformat(kwargs['created_at'])
@@ -50,6 +53,7 @@ class BaseModel:
 
             # Update instance dictionary with kwargs
             self.__dict__.update(kwargs)
+            self.save()
 
     def to_dict(self):
         """Convert instance into dict format."""

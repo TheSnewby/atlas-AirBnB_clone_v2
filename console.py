@@ -262,65 +262,148 @@ class HBNBCommand(cmd.Cmd):
         """ Updates a certain object with new info """
         c_name = c_id = att_name = att_val = kwargs = ''
 
-        # Isolate cls from id/args, ex: (<cls>, delim, <id/args>)
+        # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
         args = args.partition(" ")
         if args[0]:
             c_name = args[0]
-        else:  # Class name not present
+        else:  # class name not present
             print("** class name missing **")
             return
-
-        if c_name not in HBNBCommand.classes:  # Class name invalid
+        if c_name not in HBNBCommand.classes:  # class name invalid
             print("** class doesn't exist **")
             return
 
-        # Isolate id from args
+        # isolate id from args
         args = args[2].partition(" ")
         if args[0]:
             c_id = args[0]
-        else:  # Id not present
+        else:  # id not present
             print("** instance id missing **")
             return
 
-        # Generate key from class and id
-        key = f"{c_name}.{c_id}"
+        # generate key from class and id
+        key = c_name + "." + c_id
 
-        # Determine if key is present
+        # determine if key is present
         if key not in storage.all():
             print("** no instance found **")
             return
 
-        # First determine if kwargs or args
+        # first determine if kwargs or args
         if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
             kwargs = eval(args[2])
-            args = []  # Reformat kwargs into list, ex: [<name>, <value>, ...]
+            args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
             for k, v in kwargs.items():
                 args.append(k)
                 args.append(v)
-        else:  # Isolate args
+        else:  # isolate args
             args = args[2]
-            if args and args[0] == '\"':  # Check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
-                # Strip the quote and whitespace, find corresponding value
-                att_val = args[second_quote + 1:].strip().partition(" ")[0]
+                args = args[second_quote + 1:]
 
-            else:  # There are no arguments
-                print("** attribute name missing **")
-                return
+            args = args.partition(' ')
 
-        # Check for value of attribute
-        if not att_val:
-            print("** value missing **")
-            return
+            # if att_name was not quoted arg
+            if not att_name and args[0] != ' ':
+                att_name = args[0]
+            # check for quoted val arg
+            if args[2] and args[2][0] == '\"':
+                att_val = args[2][1:args[2].find('\"', 1)]
 
-        # Handle assignment
-        obj = storage.all()[key]
-        if hasattr(obj, att_name):
-            setattr(obj, att_name, att_val)
-            obj.save()
-        else:
-            print("** attribute doesn't exist **")
+            # if att_val was not quoted arg
+            if not att_val and args[2]:
+                att_val = args[2].partition(' ')[0]
+
+            args = [att_name, att_val]
+
+        # retrieve dictionary of current objects
+        new_dict = storage.all()[key]
+
+        # iterate through attr names and values
+        for i, att_name in enumerate(args):
+            # block only runs on even iterations
+            if (i % 2 == 0):
+                att_val = args[i + 1]  # following item is value
+                if not att_name:  # check for att_name
+                    print("** attribute name missing **")
+                    return
+                if not att_val:  # check for att_value
+                    print("** value missing **")
+                    return
+                # type cast as necessary
+                if att_name in HBNBCommand.types:
+                    att_val = HBNBCommand.types[att_name](att_val)
+
+                # update dictionary with name, value pair
+                new_dict.__dict__.update({att_name: att_val})
+
+        new_dict.save()  # save updates to file
+
+    # def do_update(self, args):
+    #     """ Updates a certain object with new info """
+    #     c_name = c_id = att_name = att_val = kwargs = ''
+
+    #     # Isolate cls from id/args, ex: (<cls>, delim, <id/args>)
+    #     args = args.partition(" ")
+    #     if args[0]:
+    #         c_name = args[0]
+    #     else:  # Class name not present
+    #         print("** class name missing **")
+    #         return
+
+    #     if c_name not in HBNBCommand.classes:  # Class name invalid
+    #         print("** class doesn't exist **")
+    #         return
+
+    #     # Isolate id from args
+    #     args = args[2].partition(" ")
+    #     if args[0]:
+    #         c_id = args[0]
+    #     else:  # Id not present
+    #         print("** instance id missing **")
+    #         return
+
+    #     # Generate key from class and id
+    #     key = c_name + "." + c_id
+
+    #     # Determine if key is present
+    #     if key not in storage.all():
+    #         print("** no instance found **")
+    #         return
+
+    #     # First determine if kwargs or args
+    #     if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
+    #         kwargs = eval(args[2])
+    #         args = []  # Reformat kwargs into list, ex: [<name>, <value>, ...]
+    #         for k, v in kwargs.items():
+    #             args.append(k)
+    #             args.append(v)
+    #     else:  # Isolate args
+    #         args = args[2]
+    #         if args and args[0] == '\"':  # Check for quoted arg
+    #             second_quote = args.find('\"', 1)
+    #             att_name = args[1:second_quote]
+    #             # Strip the quote and whitespace, find corresponding value
+    #             att_val = args[second_quote + 1:].strip().partition(" ")[0]
+
+    #         else:  # There are no arguments
+    #             print("** attribute name missing **")
+    #             return
+
+    #     # Check for value of attribute
+    #     if not att_val:
+    #         print("** value missing **")
+    #         return
+
+    #     # Handle assignment
+    #     obj = storage.all()[key]
+    #     if hasattr(obj, att_name):
+    #         setattr(obj, att_name, att_val)
+    #         obj.save()
+    #     else:
+    #         print("** attribute doesn't exist **")
 
     def help_update(self):
         """ Help information for the update command """
