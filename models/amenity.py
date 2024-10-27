@@ -19,6 +19,6 @@ class Amenity(BaseModel, Base):
     else:
         name = ""
 
-    def __init__(self, *args, **kwargs):
-        """Initializes an instance of Amenity"""
-        super().__init__(*args, **kwargs)
+        def __init__(self, *args, **kwargs):
+            """Initializes an instance of Amenity"""
+            super().__init__(*args, **kwargs)
