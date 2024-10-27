@@ -46,27 +46,27 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenities = []
 
-    @property
-    def amenity_ids(self):
-        """Return a list of Amenity ids linked to the Place"""
-        return [amenity.id for amenity in self.amenities]
+        @property
+        def amenity_ids(self):
+            """Return a list of Amenity ids linked to the Place"""
+            return [amenity.id for amenity in self.amenities]
 
-    @amenity_ids.setter
-    def amenity_ids(self, amenity):
-        """Add Amenity.id to the list of amenity_ids"""
-        from models.amenity import Amenity
-        if isinstance(amenity, str):  # Expecting an Amenity ID
-            from models import storage
-            amenity_obj = storage.get(Amenity, amenity)
-            if amenity_obj:
-                self.amenities.append(amenity_obj)
+        @amenity_ids.setter
+        def amenity_ids(self, amenity):
+            """Add Amenity.id to the list of amenity_ids"""
+            from models.amenity import Amenity
+            if isinstance(amenity, str):  # Expecting an Amenity ID
+                from models import storage
+                amenity_obj = storage.get(Amenity, amenity)
+                if amenity_obj:
+                    self.amenities.append(amenity_obj)
 
-    def remove_amenity(self, amenity):
-        """Remove Amenity from the Place"""
-        from models.amenity import Amenity
-        if isinstance(amenity, Amenity):
-            self.amenities.remove(amenity)
-        elif isinstance(amenity, str):  # If passed an Amenity ID
-            amenity_obj = next((a for a in self.amenities if a.id == amenity), None)
-            if amenity_obj:
-                self.amenities.remove(amenity_obj)
+        def remove_amenity(self, amenity):
+            """Remove Amenity from the Place"""
+            from models.amenity import Amenity
+            if isinstance(amenity, Amenity):
+                self.amenities.remove(amenity)
+            elif isinstance(amenity, str):  # If passed an Amenity ID
+                amenity_obj = next((a for a in self.amenities if a.id == amenity), None)
+                if amenity_obj:
+                    self.amenities.remove(amenity_obj)
