@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Table
+from sqlalchemy import Column, String, ForeignKey, Table, Integer, Float
 from sqlalchemy.orm import relationship
 from models.engine import storage_type
 
@@ -31,7 +31,8 @@ class Place(BaseModel, Base):
         longitude = Column(Float, nullable=True)
 
         # Define the relationship with Amenity through the association table
-        amenities = relationship("Amenity", secondary=place_amenity, backref="places", viewonly=False)
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 backref="places", viewonly=False)
     else:
         user_id = ""
         city_id = ""
@@ -53,6 +54,7 @@ class Place(BaseModel, Base):
     @amenity_ids.setter
     def amenity_ids(self, amenity):
         """Add Amenity.id to the list of amenity_ids"""
+        from models.amenity import Amenity
         if isinstance(amenity, str):  # Expecting an Amenity ID
             from models import storage
             amenity_obj = storage.get(Amenity, amenity)
@@ -61,6 +63,7 @@ class Place(BaseModel, Base):
 
     def remove_amenity(self, amenity):
         """Remove Amenity from the Place"""
+        from models.amenity import Amenity
         if isinstance(amenity, Amenity):
             self.amenities.remove(amenity)
         elif isinstance(amenity, str):  # If passed an Amenity ID
