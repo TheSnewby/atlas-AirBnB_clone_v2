@@ -27,7 +27,7 @@ class DBStorage:
     __session = None
 
     classes = {
-            'User': User, 'Place': Place,
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
             'State': State, 'City': City, 'Amenity': Amenity,
             'Review': Review
             }
