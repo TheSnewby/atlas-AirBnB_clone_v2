@@ -18,6 +18,7 @@ class User(BaseModel, Base):
 
         # Relationship with Place
         places = relationship("Place", back_populates="user", cascade="all, delete-orphan")
+        reviews = relationship("Review", cascade="all, delete-orphan")
 
         # Optionally, add unique constraint to email if needed
         __table_args__ = (
