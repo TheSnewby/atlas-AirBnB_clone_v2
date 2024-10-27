@@ -65,11 +65,10 @@ class FileStorage:
 
     def delete(self, obj=None):
         """Deletes an object from storage."""
-        if obj is None:
-            return
-        key = f"{type(obj).__name__}.{obj.id}"
-        if key in self.__objects:
-            del self.__objects[key]
-            self.save()
-        else:
-            raise KeyError("** no instance found **")
+        if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            if key in FileStorage.__objects:
+                del FileStorage.__objects[key]
+                self.save()
+            # else:
+            #     print("** no instance found **")

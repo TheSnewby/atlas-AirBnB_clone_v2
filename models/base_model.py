@@ -3,12 +3,14 @@
 
 from datetime import datetime, timezone
 import uuid
-import sqlalchemy
 from sqlalchemy import Column, String, DateTime
+from sqlalchemy.orm import declarative_base
+from models.engine import storage_type
 
+
+Base = declarative_base()
 class BaseModel:
     """Base class for all models in the AirBnB clone."""
-
     id = Column(String(60), primary_key=True, default=lambda: str(uuid.uuid4()))
     created_at = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
     updated_at = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
@@ -17,12 +19,14 @@ class BaseModel:
         """Instantiate a new model."""
         if not kwargs:
             # Set the default values if no kwargs provided
+            self.id = str(uuid.uuid4())
             self.created_at = datetime.now(timezone.utc)
             self.updated_at = datetime.now(timezone.utc)
+
         else:
             if 'id' not in kwargs:
                 raise KeyError('id is required')
-            
+
             # Assign values from kwargs or set default values
             self.id = kwargs['id']
 
@@ -66,4 +70,16 @@ class BaseModel:
 
     def __str__(self):
         """String representation of the BaseModel."""
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.to_dict())
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+
+    def delete(self):
+        """Deletes a BaseModel instance from models.storage."""
+        from models import storage
+        storage.delete(self)
+
+    def save(self):
+        """Updates updated_at with current time when instance is changed."""
+        from models import storage
+        self.updated_at = datetime.now(timezone.utc)
+        storage.new(self)
+        storage.save()
