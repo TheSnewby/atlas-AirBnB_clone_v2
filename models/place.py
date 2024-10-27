@@ -1,16 +1,24 @@
 #!/usr/bin/python3
-"""This module defines a class Place"""
+""" Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.engine import storage_type
 
+# Define the association table for the many-to-many relationship
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+)
 
 class Place(BaseModel, Base):
     """This class defines a place by various attributes"""
     __tablename__ = 'places'
+    
     if storage_type == 'db':
-        # Class attributes representing columns
+        # Define columns
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -22,18 +30,40 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
 
-        # Relationships
-        user = relationship("User", back_populates="places")
-        city = relationship("City", back_populates="places")
-            # cascade="all, delete-orphan"
+        # Define the relationship with Amenity through the association table
+        amenities = relationship("Amenity", secondary=place_amenity, backref="places", viewonly=False)
     else:
-        user_id = ''
-        city_id = ''
-        name = ''
-        description = ''
+        user_id = ""
+        city_id = ""
+        name = ""
+        description = ""
         number_rooms = 0
         number_bathrooms = 0
         max_guest = 0
         price_by_night = 0
         latitude = 0.0
         longitude = 0.0
+        amenities = []
+
+    @property
+    def amenity_ids(self):
+        """Return a list of Amenity ids linked to the Place"""
+        return [amenity.id for amenity in self.amenities]
+
+    @amenity_ids.setter
+    def amenity_ids(self, amenity):
+        """Add Amenity.id to the list of amenity_ids"""
+        if isinstance(amenity, str):  # Expecting an Amenity ID
+            from models import storage
+            amenity_obj = storage.get(Amenity, amenity)
+            if amenity_obj:
+                self.amenities.append(amenity_obj)
+
+    def remove_amenity(self, amenity):
+        """Remove Amenity from the Place"""
+        if isinstance(amenity, Amenity):
+            self.amenities.remove(amenity)
+        elif isinstance(amenity, str):  # If passed an Amenity ID
+            amenity_obj = next((a for a in self.amenities if a.id == amenity), None)
+            if amenity_obj:
+                self.amenities.remove(amenity_obj)
