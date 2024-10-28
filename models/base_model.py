@@ -43,13 +43,14 @@ class BaseModel:
             else:
                 self.updated_at = datetime.now(timezone.utc)
 
+            #FAILED ATTEMPT AT KWARGS KEY ERROR - 
+            # if self.__class__ == BaseModel:
+            #     for key in kwargs.keys():
+            #         if key not in ['id', 'created_at', 'updated_at']:
+            #             raise KeyError('Invalid key')
+
             # Clean up unwanted keys
             kwargs.pop('__class__', None)
-
-            # Set attributes from kwargs
-            for key, val in kwargs.items():
-                if key not in ['updated_at', 'created_at']:
-                    setattr(self, key, val)
 
             # Update instance dictionary with kwargs
             self.__dict__.update(kwargs)
