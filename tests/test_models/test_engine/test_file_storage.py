@@ -2,10 +2,11 @@
 """ Module for testing file storage"""
 import unittest
 from models.base_model import BaseModel
-from models import storage
+from models import storage, storage_type
 import os
 
 
+@unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
 class test_fileStorage(unittest.TestCase):
     """ Class to test the file storage method """
 

@@ -1,9 +1,8 @@
 import unittest
 from io import StringIO
 from unittest.mock import patch
-import sys
 from console import HBNBCommand
-from models import storage
+from models import storage, storage_type
 from models.base_model import BaseModel
 
 
@@ -31,6 +30,7 @@ class TestHBNBCommand(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.console.do_EOF("")  # This should raise SystemExit
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_do_create(self):
         """Test the create command."""
         with patch('sys.stdout', new=StringIO()) as fake_out:
@@ -38,6 +38,7 @@ class TestHBNBCommand(unittest.TestCase):
             output = fake_out.getvalue().strip()
             self.assertTrue(output)  # Expect an ID to be printed
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_do_show(self):
         """Test the show command."""
         bm = BaseModel()
@@ -47,6 +48,7 @@ class TestHBNBCommand(unittest.TestCase):
             output = fake_out.getvalue().strip()
             self.assertIn(bm.id, output)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_do_destroy(self):
         """Test the destroy command."""
         bm = BaseModel()
@@ -57,6 +59,7 @@ class TestHBNBCommand(unittest.TestCase):
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "** no instance found **")
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_do_all(self):
         """Test the all command."""
         bm1 = BaseModel()
@@ -69,6 +72,7 @@ class TestHBNBCommand(unittest.TestCase):
             self.assertIn(bm1.id, output)
             self.assertIn(bm2.id, output)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_do_count(self):
         """Test the count command."""
         bm1 = BaseModel()
@@ -80,6 +84,7 @@ class TestHBNBCommand(unittest.TestCase):
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "2")  # Expecting count of 2
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_do_update(self):
         """Test the update command."""
         bm = BaseModel()
