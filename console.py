@@ -4,6 +4,7 @@ import cmd
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
+from models.engine import storage_type
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -93,6 +94,8 @@ class HBNBCommand(cmd.Cmd):
 
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
+        if storage_type == 'db':
+            storage.close()
         if not sys.__stdin__.isatty():
             print('(hbnb) ', end='')
         return stop
@@ -108,7 +111,6 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
         print()
-        # return True (old code)
         raise SystemExit  # End the command loop
 
     def help_EOF(self):
@@ -133,20 +135,20 @@ class HBNBCommand(cmd.Cmd):
             if '=' in arg:
                 key, value = arg.split('=', 1)
                 if value.startswith('"') and value.endswith('"'):
-                    value = value.replace('_', ' ').replace('"', '')
+                    value = value[1:-1].replace('_', ' ')
                     params[key] = value
                 elif value.isdigit():
-                    value = int(value)
-                    params[key] = value
+                    try:
+                        value = int(value)
+                        params[key] = value
+                    except ValueError:
+                        continue
                 else:
                     try:
                         value = float(value)
                         params[key] = value
-                    except:
-                        pass
-        # print("params: ", end='')  # DEBUG
-        # print(params)  # DEBUG
-        # print(args[0])  # DEBUG
+                    except ValueError:
+                        continue
         new_instance = HBNBCommand.classes[args[0]](**params)
         new_instance.save()  # Save immediately after creation
         print(new_instance.id)

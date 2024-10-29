@@ -38,7 +38,7 @@ class Place(BaseModel, Base):
         # Defines relationships with City
         cities = relationship("City", back_populates="places")
         # Defines relationships with Review
-        reviews = relationship("Review", cascade="all, delete-orphan")
+        reviews = relationship("Review", back_populates= "place", cascade="all, delete-orphan")
     else:
         user_id = ""
         city_id = ""
@@ -50,22 +50,41 @@ class Place(BaseModel, Base):
         price_by_night = 0
         latitude = 0.0
         longitude = 0.0
-        amenities = []
+        # amenities = []
+        amenity_ids = []
+
+        # @property
+        # def amenity_ids(self):
+        #     """Return a list of Amenity ids linked to the Place"""
+        #     return [amenity.id for amenity in self.amenities]
 
         @property
-        def amenity_ids(self):
-            """Return a list of Amenity ids linked to the Place"""
-            return [amenity.id for amenity in self.amenities]
+        def amenities(self):
+            """Return a list of Amenity instances linked to the Place"""
+            from models import storage
+            from models.amenity import Amenity
+            list_amenities = []
+            for amen in storage.all(Amenity).values():
+                if amen.id in self.amenity_ids():
+                    list_amenities.append(amen)
+            return list_amenities
 
-        @amenity_ids.setter
-        def amenity_ids(self, amenity):
+        @amenities.setter
+        def amenities(self, amenity):
             """Add Amenity.id to the list of amenity_ids"""
             from models.amenity import Amenity
-            if isinstance(amenity, str):  # Expecting an Amenity ID
-                from models import storage
-                amenity_obj = storage.get(Amenity, amenity)
-                if amenity_obj:
-                    self.amenities.append(amenity_obj)
+            if isinstance(amenity, Amenity):
+                self.amenity_ids.append(amenity.id)
+
+        # @amenity_ids.setter
+        # def amenity_ids(self, amenity):
+        #     """Add Amenity.id to the list of amenity_ids"""
+        #     from models.amenity import Amenity
+        #     if isinstance(amenity, str):  # Expecting an Amenity ID
+        #         from models import storage
+        #         amenity_obj = storage.get(Amenity, amenity)
+        #         if amenity_obj:
+        #             self.amenities.append(amenity_obj)
 
         def remove_amenity(self, amenity):
             """Remove Amenity from the Place"""

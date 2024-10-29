@@ -27,7 +27,6 @@ class DBStorage:
     __session = None
 
     classes = {
-            # 'BaseModel': BaseModel,
             'User': User, 'Place': Place,
             'State': State, 'City': City, 'Amenity': Amenity,
             'Review': Review
@@ -44,12 +43,9 @@ class DBStorage:
         )
         if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
-        # session_factory = sessionmaker(bind=self.__engine,
-        #                               expire_on_commit=False)()
-        # self.__session = scoped_session(session_factory)
-        # self.__engine = create_engine(
-        #     'mysql+mysqldb://user:pwd@localhost/db_name'
-        # )
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        self.__session = scoped_session(session_factory)
 
     def all(self, cls=None):
         """Query all objects based on class or all classes."""
@@ -62,11 +58,14 @@ class DBStorage:
             query = []
             for model_class in DBStorage.classes.values():
                 query.extend(self.__session.query(model_class).all())
+                # items = self.__session.query(model_class).all()
+                # query.extend(items)
+                # print(f"DEBUG: Found {len(items)} items for {model_class.__name__}")  # Debug
             for item in query:
                 result_dict['{}.{}'.format(
                     item.__class__.__name__, item.id)] = item
+        self.__session.expire_all()
         return result_dict
-
 
     def new(self, obj):
         """Add a new object to the current database session."""
@@ -74,16 +73,29 @@ class DBStorage:
 
     def save(self):
         """Commit all changes to the database."""
-        self.__session.commit()
+        try:
+            # print("DEBUG: DB STORAGE COMMITTING")  # DEBUG
+            self.__session.commit()
+            self.close()
+        except Exception as e:
+            print("Error during commit: {}".format(e))
+            self.__session.rollback()
 
     def reload(self):
         """Reload data from the database."""
         Base.metadata.create_all(self.__engine)
+        if self.__session:
+            self.close()
         session_factory = sessionmaker(bind=self.__engine,
                                        expire_on_commit=False)
         self.__session = scoped_session(session_factory)
+        # print("DEBUG: Database session reloaded")  # DEBUG
 
     def delete(self, obj=None):
         if obj:
             self.__session.delete(obj)
             self.save()
+
+    def close(self):
+        """Session Closer"""
+        self.__session.remove()

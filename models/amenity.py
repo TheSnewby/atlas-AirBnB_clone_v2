@@ -15,7 +15,7 @@ class Amenity(BaseModel, Base):
         name = Column(String(128), nullable=False)
 
         # Define the many-to-many relationship with Place
-        places = relationship("Place", secondary="place_amenity", viewonly=False)
+        # places = relationship("Place", secondary="place_amenity", viewonly=False)
     else:
         name = ""
 
