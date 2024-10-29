@@ -6,6 +6,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from models.engine import storage_type
 
+
 class User(BaseModel, Base):
     """This class defines a user by various attributes"""
     __tablename__ = 'users'
@@ -17,9 +18,11 @@ class User(BaseModel, Base):
         last_name = Column(String(128), nullable=True)
 
         # Relationship with Place
-        places = relationship("Place", back_populates="user", cascade="all, delete-orphan")
+        places = relationship("Place", back_populates="user",
+                              cascade="all, delete-orphan")
         # Relationship with Review
-        reviews = relationship("Review", back_populates="user", cascade="all, delete-orphan")
+        reviews = relationship("Review", back_populates="user",
+                               cascade="all, delete-orphan")
 
         # Optionally, add unique constraint to email if needed
         __table_args__ = (

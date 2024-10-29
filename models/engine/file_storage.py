@@ -10,6 +10,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class FileStorage:
     """This class manages storage of HBNB models in JSON format."""
     __file_path = 'file.json'
@@ -17,11 +18,14 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models (of a class) currently in storage."""
-        if cls is not None and not issubclass(cls, (BaseModel, User, Place, State, City, Amenity, Review)):
+        if cls is not None and not issubclass(cls, (BaseModel, User, Place,
+                                                    State, City, Amenity,
+                                                    Review)):
             raise TypeError("cls must be a class type")
 
         if cls:
-            return {key: value for key, value in self.__objects.items() if isinstance(value, cls)}
+            return {key: value for key, value in self.__objects.items()
+                    if isinstance(value, cls)}
         return self.__objects
 
     def new(self, obj):
@@ -45,15 +49,15 @@ class FileStorage:
         with open(self.__file_path, 'r') as f:
             data = f.read()
             if not data:
-                raise ValueError("File is empty")  # Raise ValueError if file is empty
+                raise ValueError("File is empty")  # Raise ValueError if empty
 
             temp = json.loads(data)
             classes = {
-                'BaseModel': BaseModel, 
-                'User': User, 
+                'BaseModel': BaseModel,
+                'User': User,
                 'Place': Place,
-                'State': State, 
-                'City': City, 
+                'State': State,
+                'City': City,
                 'Amenity': Amenity,
                 'Review': Review
             }
@@ -70,5 +74,3 @@ class FileStorage:
             if key in FileStorage.__objects:
                 del FileStorage.__objects[key]
                 self.save()
-            # else:
-            #     print("** no instance found **")

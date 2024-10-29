@@ -32,7 +32,7 @@ class test_fileStorage(unittest.TestCase):
         """ New object is correctly added to __objects """
         new = BaseModel()
         storage.new(new)  # Ensure the object is added to storage
-        temp = storage.all()[f'BaseModel.{new.id}']  # Retrieve the object from storage
+        temp = storage.all()[f'BaseModel.{new.id}']  # Get object from storage
         self.assertTrue(temp is new)  # Check if it's the same instance
 
     def test_all(self):
@@ -66,9 +66,9 @@ class test_fileStorage(unittest.TestCase):
         storage.new(new)  # Add the object to storage
         storage.save()  # Save it to the file
         storage.reload()  # Reload from file
-        loaded = storage.all().get(f'BaseModel.{new.id}')  # Get the loaded object
+        loaded = storage.all().get(f'BaseModel.{new.id}')  # Get loaded object
         self.assertIsNotNone(loaded)  # Ensure loaded is not None
-        self.assertEqual(new.to_dict()['id'], loaded.to_dict()['id'])  # Check the ID
+        self.assertEqual(new.to_dict()['id'], loaded.to_dict()['id'])  # ID
 
     def test_reload_empty(self):
         """ Test loading from an empty file """
@@ -103,7 +103,7 @@ class test_fileStorage(unittest.TestCase):
         storage.new(new)  # Ensure object is added to storage
         _id = new.to_dict()['id']
         temp = list(storage.all().keys())[0]  # Get the first key
-        self.assertEqual(temp, f'BaseModel.{_id}')  # Check if the format is correct
+        self.assertEqual(temp, 'BaseModel.{}'.format(_id))  # Check format
 
     def test_storage_var_created(self):
         """ FileStorage object storage created """

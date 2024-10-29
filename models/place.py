@@ -9,9 +9,12 @@ from models.engine import storage_type
 place_amenity = Table(
     'place_amenity',
     Base.metadata,
-    Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
-    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+    Column('place_id', String(60), ForeignKey('places.id'),
+           primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'),
+           primary_key=True, nullable=False)
 )
+
 
 class Place(BaseModel, Base):
     """This class defines a place by various attributes"""
@@ -38,7 +41,8 @@ class Place(BaseModel, Base):
         # Defines relationships with City
         cities = relationship("City", back_populates="places")
         # Defines relationships with Review
-        reviews = relationship("Review", back_populates= "place", cascade="all, delete-orphan")
+        reviews = relationship("Review", back_populates="place",
+                               cascade="all, delete-orphan")
     else:
         user_id = ""
         city_id = ""
@@ -92,7 +96,8 @@ class Place(BaseModel, Base):
             if isinstance(amenity, Amenity):
                 self.amenities.remove(amenity)
             elif isinstance(amenity, str):  # If passed an Amenity ID
-                amenity_obj = next((a for a in self.amenities if a.id == amenity), None)
+                amenity_obj = next((a for a in self.amenities
+                                    if a.id == amenity), None)
                 if amenity_obj:
                     self.amenities.remove(amenity_obj)
 

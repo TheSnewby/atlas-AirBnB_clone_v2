@@ -16,7 +16,7 @@ class TestHBNBCommand(unittest.TestCase):
 
     def tearDown(self):
         """Clean up after tests."""
-        storage.all().clear()  # Assuming storage.all() returns a dictionary of instances
+        storage.all().clear()
 
     def test_prompt(self):
         """Test prompt initialization."""
@@ -84,12 +84,11 @@ class TestHBNBCommand(unittest.TestCase):
         """Test the update command."""
         bm = BaseModel()
         bm.save()
-        self.console.do_update(f"BaseModel {bm.id} name 'New Name'")
-        # above line has an f-string. will it work?
+        self.console.do_update('BaseModel {} name "New_Name"'.format(bm.id))
 
         # Check if the attribute was updated correctly
         self.assertTrue(hasattr(bm, 'name'))  # Check if name attribute exists
-        self.assertEqual(bm.name, 'New Name')  # Verify the value is updated
+        self.assertEqual(bm.name, "New_Name")  # Verify the value is updated
 
 
 if __name__ == '__main__':

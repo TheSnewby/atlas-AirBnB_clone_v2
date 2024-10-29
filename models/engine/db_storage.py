@@ -20,6 +20,7 @@ mysql_password = os.getenv('HBNB_MYSQL_PWD')
 mysql_host = os.getenv('HBNB_MYSQL_HOST', 'localhost')
 mysql_db = os.getenv('HBNB_MYSQL_DB')
 
+
 class DBStorage:
     """Represents the database storage engine."""
 
@@ -58,9 +59,6 @@ class DBStorage:
             query = []
             for model_class in DBStorage.classes.values():
                 query.extend(self.__session.query(model_class).all())
-                # items = self.__session.query(model_class).all()
-                # query.extend(items)
-                # print(f"DEBUG: Found {len(items)} items for {model_class.__name__}")  # Debug
             for item in query:
                 result_dict['{}.{}'.format(
                     item.__class__.__name__, item.id)] = item
