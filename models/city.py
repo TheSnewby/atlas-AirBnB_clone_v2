@@ -13,7 +13,7 @@ class City(BaseModel, Base):
         name = Column(String(128), nullable=False)
 
         # Relationship to Place
-        places = relationship("Place", back_populates="city",
+        places = relationship("Place", back_populates="cities",
                               cascade="all, delete-orphan")
         # Relationship to State
         state = relationship("State", back_populates="cities")
