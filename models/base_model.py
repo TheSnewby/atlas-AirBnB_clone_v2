@@ -5,15 +5,19 @@ from datetime import datetime, timezone
 import uuid
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import declarative_base
-from models.engine import storage_type
 
 
 Base = declarative_base()
+
+
 class BaseModel:
     """Base class for all models in the AirBnB clone."""
-    id = Column(String(60), primary_key=True, default=lambda: str(uuid.uuid4()))
-    created_at = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
-    updated_at = Column(DateTime, nullable=False, default=datetime.now(timezone.utc))
+    id = Column(String(60), primary_key=True, default=lambda: str(
+        uuid.uuid4()))
+    created_at = Column(DateTime, nullable=False, default=datetime.now(
+        timezone.utc))
+    updated_at = Column(DateTime, nullable=False, default=datetime.now(
+        timezone.utc))
 
     def __init__(self, *args, **kwargs):
         """Instantiate a new model."""
@@ -24,9 +28,6 @@ class BaseModel:
             self.updated_at = datetime.now(timezone.utc)
 
         else:
-            # if 'id' not in kwargs:
-            #     raise KeyError('id is required')
-
             # Assign values from kwargs or set default values
             if 'id' in kwargs:
                 self.id = kwargs['id']
@@ -34,20 +35,16 @@ class BaseModel:
                 self.id = str(uuid.uuid4())
 
             if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.fromisoformat(kwargs['created_at'])
+                kwargs['created_at'] = datetime.fromisoformat(
+                    kwargs['created_at'])
             else:
                 self.created_at = datetime.now(timezone.utc)
 
             if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.fromisoformat(kwargs['updated_at'])
+                kwargs['updated_at'] = datetime.fromisoformat(
+                    kwargs['updated_at'])
             else:
                 self.updated_at = datetime.now(timezone.utc)
-
-            #FAILED ATTEMPT AT KWARGS KEY ERROR - 
-            # if self.__class__ == BaseModel:
-            #     for key in kwargs.keys():
-            #         if key not in ['id', 'created_at', 'updated_at']:
-            #             raise KeyError('Invalid key')
 
             # Clean up unwanted keys
             kwargs.pop('__class__', None)
@@ -65,8 +62,10 @@ class BaseModel:
         })
 
         # Format created_at and updated_at correctly
-        dictionary['created_at'] = self.created_at.isoformat() if isinstance(self.created_at, datetime) else self.created_at
-        dictionary['updated_at'] = self.updated_at.isoformat() if isinstance(self.updated_at, datetime) else self.updated_at
+        dictionary['created_at'] = self.created_at.isoformat() if isinstance(
+            self.created_at, datetime) else self.created_at
+        dictionary['updated_at'] = self.updated_at.isoformat() if isinstance(
+            self.updated_at, datetime) else self.updated_at
 
         # Remove SQLAlchemy-specific attributes
         dictionary.pop('_sa_instance_state', None)
@@ -75,7 +74,8 @@ class BaseModel:
 
     def __str__(self):
         """String representation of the BaseModel."""
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id,
+                                     self.__dict__)
 
     def delete(self):
         """Deletes a BaseModel instance from models.storage."""

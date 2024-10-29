@@ -13,7 +13,7 @@ if storage_type == 'db':
     storage = DBStorage()
     storage.reload()
 else:
-# Instantiate the FileStorage object
+    # Instantiate the FileStorage object
     from models.engine.file_storage import FileStorage
     storage = FileStorage()
     storage.reload()
