@@ -3,7 +3,7 @@
 from models.base_model import BaseModel
 import unittest
 import datetime
-from uuid import UUID
+from models import storage_type
 import json
 import os
 
@@ -27,11 +27,13 @@ class test_basemodel(unittest.TestCase):
         except IOError:
             pass
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_default(self):
         """ """
         i = self.value()
         self.assertEqual(type(i), self.value)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_kwargs(self):
         """ """
         i = self.value()
@@ -39,6 +41,7 @@ class test_basemodel(unittest.TestCase):
         new = BaseModel(**copy)
         self.assertFalse(new is i)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_kwargs_int(self):
         """ """
         i = self.value()
@@ -47,6 +50,7 @@ class test_basemodel(unittest.TestCase):
         with self.assertRaises(TypeError):
             new = BaseModel(**copy)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_save(self):
         """ Testing save """
         i = self.value()
@@ -56,34 +60,40 @@ class test_basemodel(unittest.TestCase):
             j = json.load(f)
             self.assertEqual(j[key], i.to_dict())
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_str(self):
         """ """
         i = self.value()
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
                          i.__dict__))
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_todict(self):
         """ """
         i = self.value()
         n = i.to_dict()
         self.assertEqual(i.to_dict(), n)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_kwargs_none(self):
         """ """
         n = {None: None}
         with self.assertRaises(TypeError):
             new = self.value(**n)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_id(self):
         """ """
         new = self.value()
         self.assertEqual(type(new.id), str)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_created_at(self):
         """ """
         new = self.value()
         self.assertEqual(type(new.created_at), datetime.datetime)
 
+    @unittest.skipIf(storage_type == 'db', 'BaseModel not used in DBStorage')
     def test_updated_at(self):
         """ """
         new = self.value()
