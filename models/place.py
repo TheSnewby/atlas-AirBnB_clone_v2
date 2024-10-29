@@ -16,7 +16,7 @@ place_amenity = Table(
 class Place(BaseModel, Base):
     """This class defines a place by various attributes"""
     __tablename__ = 'places'
-    
+
     if storage_type == 'db':
         # Define columns
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
@@ -33,6 +33,12 @@ class Place(BaseModel, Base):
         # Define the relationship with Amenity through the association table
         amenities = relationship("Amenity", secondary=place_amenity,
                                  backref="places", viewonly=False)
+        # Defines relationships with User
+        user = relationship("User", back_populates="places")
+        # Defines relationships with City
+        cities = relationship("City", back_populates="places")
+        # Defines relationships with Review
+        reviews = relationship("Review", cascade="all, delete-orphan")
     else:
         user_id = ""
         city_id = ""
@@ -70,3 +76,14 @@ class Place(BaseModel, Base):
                 amenity_obj = next((a for a in self.amenities if a.id == amenity), None)
                 if amenity_obj:
                     self.amenities.remove(amenity_obj)
+
+        @property
+        def reviews(self):
+            """Return a list of Reviews instances linked to the Place"""
+            from models import storage
+            from models.review import Review
+            list_reviews = []
+            for rev in storage.all(Review).values():
+                if rev.place_id == self.id:
+                    list_reviews.append(rev)
+            return list_reviews

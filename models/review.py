@@ -15,8 +15,10 @@ class Review(BaseModel, Base):
         place_id = Column(String(60), ForeignKey('places.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
 
-        place = relationship("Place", backref="reviews", cascade="all, delete-orphan")
-        user = relationship("User", backref="reviews", cascade="all, delete-orphan")
+        # Relationship with Place
+        place = relationship("Place", backref="reviews")
+        # Relationship with User
+        user = relationship("User", backref="reviews")
 
     else:
         text = ''
