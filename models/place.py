@@ -38,7 +38,7 @@ class Place(BaseModel, Base):
         # Defines relationships with City
         cities = relationship("City", back_populates="places")
         # Defines relationships with Review
-        reviews = relationship("Review", cascade="all, delete-orphan")
+        reviews = relationship("Review", back_populates= "place", cascade="all, delete-orphan")
     else:
         user_id = ""
         city_id = ""

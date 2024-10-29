@@ -16,9 +16,9 @@ class Review(BaseModel, Base):
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
 
         # Relationship with Place
-        place = relationship("Place", backref="reviews")
+        place = relationship("Place", back_populates="reviews")
         # Relationship with User
-        user = relationship("User", backref="reviews")
+        user = relationship("User", back_populates="reviews")
 
     else:
         text = ''
