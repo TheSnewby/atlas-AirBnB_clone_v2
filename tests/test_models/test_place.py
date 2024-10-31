@@ -74,6 +74,7 @@ class test_Place(test_basemodel):
         new = self.value()
         self.assertEqual(type(new.amenity_ids), list)
 
+
 @unittest.skipUnless(storage_type == 'db', "Tests designed only for DBStorage")
 class test_place_DB(unittest.TestCase):
     """Place DB tests"""
