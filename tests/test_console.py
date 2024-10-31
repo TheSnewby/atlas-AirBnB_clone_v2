@@ -44,7 +44,7 @@ class TestHBNBCommand(unittest.TestCase):
         bm = BaseModel()
         bm.save()
         with patch('sys.stdout', new=StringIO()) as fake_out:
-            self.console.do_show(f"BaseModel {bm.id}")
+            self.console.do_show("BaseModel {}".format(bm.id))
             output = fake_out.getvalue().strip()
             self.assertIn(bm.id, output)
 
@@ -53,9 +53,9 @@ class TestHBNBCommand(unittest.TestCase):
         """Test the destroy command."""
         bm = BaseModel()
         bm.save()
-        self.console.do_destroy(f"BaseModel {bm.id}")
+        self.console.do_destroy("BaseModel {}".format(bm.id))
         with patch('sys.stdout', new=StringIO()) as fake_out:
-            self.console.do_show(f"BaseModel {bm.id}")
+            self.console.do_show("BaseModel {}".format(bm.id))
             output = fake_out.getvalue().strip()
             self.assertEqual(output, "** no instance found **")
 

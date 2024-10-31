@@ -7,6 +7,7 @@ from models.user import User
 from models import storage_type, storage
 import unittest
 
+
 @unittest.skipIf(storage_type == 'db', 'Tests not designed for DBStorage')
 class test_User(test_basemodel):
     """ """
@@ -107,12 +108,14 @@ class test_user_DB(unittest.TestCase):
         self.assertEqual(user_from_storage.id, self.user.id)
 
     def test_user_retrieved_has_correct_first_name(self):
-        """Test that the retrieved user's first_name matches the expected value"""
+        """Test that the retrieved user's
+        first_name matches the expected value"""
         user = storage.all().get("User." + self.user.id)
         self.assertEqual(user.first_name, "John")
 
     def test_user_retrieved_has_correct_last_name(self):
-        """Test that the retrieved user's last_name matches the expected value"""
+        """Test that the retrieved user's
+        last_name matches the expected value"""
         user = storage.all().get("User." + self.user.id)
         self.assertEqual(user.last_name, "Roe")
 
@@ -122,6 +125,7 @@ class test_user_DB(unittest.TestCase):
         self.assertEqual(user.email, "a@b.com")
 
     def test_user_retrieved_has_correct_password(self):
-        """Test that the retrieved user's password matches the expected value"""
+        """Test that the retrieved user's
+        password matches the expected value"""
         user = storage.all().get("User." + self.user.id)
         self.assertEqual(user.password, "password")

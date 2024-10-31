@@ -21,6 +21,7 @@ class test_Amenity(test_basemodel):
         new = self.value()
         self.assertEqual(type(new.name), str)
 
+
 @unittest.skipUnless(storage_type == 'db', "Tests designed only for DBStorage")
 class test_amenity_DB(unittest.TestCase):
     """Amenity DB tests"""
