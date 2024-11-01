@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Hello, World variation"""
+"""Hello, World variations"""
 
 from flask import Flask
 
