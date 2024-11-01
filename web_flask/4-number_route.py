@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Multiple pages"""
 
-from flask import Flask
+from flask import Flask, abort
 
 app = Flask(__name__)
 
@@ -32,7 +32,7 @@ def numbers(n):
     if n.isdigit():
         return n + " is a number"
     else:
-        return None
+        abort(404)
 
 
 if __name__ == '__main__':
