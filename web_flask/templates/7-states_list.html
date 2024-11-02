@@ -8,8 +8,8 @@
 <BODY>
     <H1>States</H1>
     <UL id="state_list">
-        {% for item in state_list %}
-            <LI>{{ item }}</LI>
+        {% for state in state_list %}
+            <LI>State: {{ state.id }}: <B>{{ state.name }}</B></LI>
         {% endfor %}
     </UL>
 </html>
