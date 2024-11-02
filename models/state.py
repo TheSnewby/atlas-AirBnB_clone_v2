@@ -18,7 +18,7 @@ class State(BaseModel, Base):
         name = ''
 
         # getter
-        def get_cities(self):
+        def cities(self):
             from models.__init__ import storage
             from models.city import City
             list_cities = []
