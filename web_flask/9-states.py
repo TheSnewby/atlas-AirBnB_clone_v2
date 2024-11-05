@@ -16,7 +16,9 @@ def states_list(id):
         state = storage.all(State).get('State.{}'.format(id))
         if state:
             return render_template('8-cities_by_states.html',
-                            state_list=[state])
+                            state=state)
+        else:
+            return render_template('8-cities_by_states.html', state=None)
     else:
         state_list = storage.all(State).values()
         state_list = sorted(state_list, key=lambda x: x.name)
