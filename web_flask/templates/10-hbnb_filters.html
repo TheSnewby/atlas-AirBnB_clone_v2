@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/4-common.css">
+    <link rel="stylesheet" href="styles/3-header.css">
+    <link rel="stylesheet" href="styles/3-footer.css">
+    <link rel="stylesheet" href="styles/6-filters.css">
+    <link rel="icon" href="images/icon.png">
+</head>
+<header>
+    <div class="header-logo"></div>
+</header>
+<div class="container">
+    <section class="filters">
+        <button>
+            Search
+        </button>
+        <div class="locations">
+            <h3>States</h3>
+            <h4>&nbsp;</h4>
+            <ul class="popover">
+                {% for state in state_list %}
+                    <LI>State: {{ state.id }}: <B>{{ state.name }}</B></LI>
+                    <UL>
+                        {% for city in state.cities %}
+                            <LI>City: {{ city.id }}: <B>{{ city.name }}</B></LI>
+                        {% endfor %}
+                    </UL>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="amenities">
+            <h3>Amenities</h3>
+            <h4>&nbsp;</h4>
+            <ul class="popover">
+                {% for amen in amenities_list %}
+                    <LI>{{ amen }}</LI>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+</div>
+<footer>
+    <p>Holberton School</p>
+</footer>
+</html>

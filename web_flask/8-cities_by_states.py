@@ -13,6 +13,11 @@ app = Flask(__name__)
 def states_list():
     state_list = storage.all(State).values()
     state_list = sorted(state_list, key=lambda x: x.name)
+    for state in state_list:
+        if hasattr(state, 'cities'):
+            state.cities = sorted(state.cities, key=lambda x: x.name)
+        else:
+            state.cities = sorted(state.cities(), key=lambda x: x.name)
     return render_template('8-cities_by_states.html', state_list=state_list)
 
 
